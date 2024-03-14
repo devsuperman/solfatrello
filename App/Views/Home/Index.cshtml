@@ -22,13 +22,23 @@
 <ul class="list-group">
     @foreach (var item in Model)
     {
-        <li class="list-group-item">
-            @item.Item1 - R$ @item.Item2.ToString("N2")
+        <li class="list-group-item d-flex justify-content-between">
+            <span>
+                @item.Item1
+            </span>
+            <span>
+                R$ @item.Item2.ToString("N2")
+            </span>
         </li>
     }
 
-    <li class="list-group-item list-group-item-success">
-            Total - @Model.Sum(s=>s.Item2).ToString("N2")
+    <li class="list-group-item list-group-item-success d-flex justify-content-between">
+        <span>
+            Total
+        </span>
+        <span>
+            R$ @Model.Sum(s=>s.Item2).ToString("N2")   
+        </span>             
     </li>
 
 </ul>
