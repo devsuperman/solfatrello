@@ -13,7 +13,7 @@ public class Gasto
 
 
     [Required, DataType(DataType.Currency)]
-    public decimal Valor { get; set; }
+    public decimal? Valor { get; set; }
 
 
     [Required, Display(Name="Categoria")]
