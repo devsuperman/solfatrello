@@ -1,8 +1,8 @@
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using App.Models;
 using App.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace App.Controllers;
 
@@ -33,8 +33,8 @@ public class HomeController : Controller
                 s.Valor
             })
             .GroupBy(g => g.Categoria)
-            .OrderBy(o=>o.Key)
             .Select(s => new Tuple<string, decimal>(s.Key, s.Sum(d => d.Valor.Value)))
+            .OrderByDescending(o => o.Item2)
             .ToListAsync();
 
         return View(totaisPorCategoria);
