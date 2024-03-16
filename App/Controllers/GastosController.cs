@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using App.Models;
@@ -6,6 +7,7 @@ using App.Data;
 
 namespace App.Controllers
 {
+    [Authorize]
     public class GastosController : Controller
     {
         private readonly Contexto _db;

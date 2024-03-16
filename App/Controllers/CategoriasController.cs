@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using App.Models;
 using App.Data;
 
 namespace App.Controllers
 {
+    [Authorize]
     public class CategoriasController : Controller
     {
         private readonly Contexto _db;
