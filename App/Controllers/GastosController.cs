@@ -17,11 +17,26 @@ namespace App.Controllers
             _db = db;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int categoriaId = 0, DateTime? mesAno = null)
         {
-            var lista = await _db.Gastos
+            mesAno ??= DateTime.Today;
+
+            var listaCategorias = await _db.Categorias.AsNoTracking().OrderBy(o=>o.Nombre).ToListAsync();
+
+            ViewData["selectCategorias"]= new SelectList(listaCategorias, "Id", "Nombre", categoriaId);
+            ViewData["mesAno"] = mesAno.Value.ToString("yyyy-MM");
+
+            var query = _db.Gastos
                 .AsNoTrackingWithIdentityResolution()
                 .Include(a => a.Categoria)
+                .Where(w =>
+                    w.Fecha.Month == mesAno.Value.Month &&
+                    w.Fecha.Year == mesAno.Value.Year);
+
+            if (categoriaId > 1)
+                query = query.Where(w => w.CategoriaId == categoriaId);
+
+            var lista = await query
                 .OrderByDescending(o => o.Fecha)
                 .ToListAsync();
 
