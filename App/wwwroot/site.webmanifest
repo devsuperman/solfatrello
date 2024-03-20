@@ -1,7 +1,10 @@
 {
     "name": "My Gold",
     "short_name": "My Gold",
-    "start_url":"/",
+    "start_url": "/",
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone",
     "icons": [
         {
             "src": "/imagens/android-chrome-192x192.png",
@@ -14,7 +17,20 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
-    "display": "standalone"
+    "screenshots": [
+        {
+            "src": "/imagens/mygold-widee.png",
+            "sizes": "1149x835",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Wide"
+        },
+        {
+            "src": "/imagens/mygold-narrow.png",
+            "sizes": "404x649",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Narrow"
+        }
+    ]
 }
