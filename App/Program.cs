@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using App.Extensions;
 using App.Data;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions { ContentRootPath = AppContext.BaseDirectory });
 
 builder.Services.AddControllersWithViews();
 
