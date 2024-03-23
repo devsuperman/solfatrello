@@ -33,7 +33,7 @@ namespace App.Controllers
                     w.Fecha.Month == mesAno.Value.Month &&
                     w.Fecha.Year == mesAno.Value.Year);
 
-            if (categoriaId > 1)
+            if (categoriaId > 0)
                 query = query.Where(w => w.CategoriaId == categoriaId);
 
             var lista = await query
