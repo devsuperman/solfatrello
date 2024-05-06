@@ -9,7 +9,7 @@
     </h1>
 
     <div>
-        <a class="btn btn-primary" href="/categorias/anadir">
+        <a class="btn btn-primary" href="/categorias/form">
             <i class="bi bi-plus"></i> Añadir
         </a>
     </div>
@@ -26,7 +26,7 @@ else
     <div class="list-group">
         @foreach (var item in lista)
         {
-            <a class="list-group-item list-group-item-action d-flex" href="/categorias/edit/@item.Id">
+            <a class="list-group-item list-group-item-action d-flex" href="/categorias/form/@item.Id">
                 <span class='flex-grow-1'>
                     @item.Nombre
                 </span>

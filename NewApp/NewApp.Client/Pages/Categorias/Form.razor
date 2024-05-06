@@ -1,16 +1,22 @@
-﻿@page "/categorias/anadir"
+﻿@page "/categorias/form/{Id:int?}"
 
-<PageTitle>Nueva Categorias</PageTitle>
+<PageTitle>
+    @Titulo
+</PageTitle>
 
 <h1>
     <i class="bi bi-list-task"></i>
-    Nueva Categoria
+    @Titulo
 </h1>
+
 <hr />
 
-<EditForm method="post" Model="Categoria" OnValidSubmit="Save" FormName="anadir" Enhance>
+
+<EditForm method="post" Model="Categoria" OnValidSubmit="Save" FormName="form" Enhance>
 
     <DataAnnotationsValidator />
+
+    <input type="hidden" name="Categoria.Id" value="@Id" />
 
     <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
@@ -22,26 +28,37 @@
 
         <a href="/categorias" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i>
-            Volver
+            Voltar
         </a>
 
         <button type="submit" class="btn btn-primary ms-2">
             <i class="bi bi-check-circle"></i>
-            Guardar Categoria
+            Salvar Categoria
         </button>
     </div>
 
 </EditForm>
 
+
 @code {
+
+    public string Titulo => Id != 0 ? "Editar Categoria" : "Criar Categoria";
+
+    [Parameter]
+    public int Id { get; set; }
 
     [SupplyParameterFromForm]
     public Categoria Categoria { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id > 0)
+            Categoria = await _categoriasRepository.Get(Id);
+    }
 
     public async Task Save()
     {
         await _categoriasRepository.Upsert(Categoria);
         _navigation.NavigateTo("/categorias");
-    }    
-
+    }
 }
