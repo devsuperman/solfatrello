@@ -1,0 +1,47 @@
+﻿@page "/categorias/anadir"
+
+<PageTitle>Nueva Categorias</PageTitle>
+
+<h1>
+    <i class="bi bi-list-task"></i>
+    Nueva Categoria
+</h1>
+<hr />
+
+<EditForm method="post" Model="Categoria" OnValidSubmit="Save" FormName="anadir" Enhance>
+
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <InputText id="nombre" @bind-Value="Categoria.Nombre" class="form-control" />
+        <ValidationMessage For="() => Categoria.Nombre" class="text-danger" />
+    </div>
+
+    <div class="d-flex justify-content-end">
+
+        <a href="/categorias" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i>
+            Volver
+        </a>
+
+        <button type="submit" class="btn btn-primary ms-2">
+            <i class="bi bi-check-circle"></i>
+            Guardar Categoria
+        </button>
+    </div>
+
+</EditForm>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public Categoria Categoria { get; set; } = new();
+
+    public async Task Save()
+    {
+        await _categoriasRepository.Upsert(Categoria);
+        _navigation.NavigateTo("/categorias");
+    }    
+
+}
