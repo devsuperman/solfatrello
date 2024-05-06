@@ -1,24 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using App.Models;
-using App.Data;
+using Dominio.Interfaces;
+using Dominio.Models;
 
 namespace App.Controllers
 {
     [Authorize]
     public class CategoriasController : Controller
     {
-        private readonly Contexto _db;
+        private readonly ICategoriasRepository _repository;
 
-        public CategoriasController(Contexto db)
+        public CategoriasController(ICategoriasRepository respository)
         {
-            _db = db;
+            _repository = respository;
         }
 
         public async Task<IActionResult> Index()
         {
-            var lista = await _db.Categorias.OrderBy(o => o.Nombre).ToListAsync();
+            var lista = await _repository.ListAll();
             return View(lista);
         }
 
@@ -29,9 +28,7 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Add(model);
-                await _db.SaveChangesAsync();
-
+                await _repository.Upsert(model);
                 return RedirectToAction("Index");
             }
 
@@ -40,7 +37,7 @@ namespace App.Controllers
 
         public async Task<IActionResult> Editar(int id)
         {
-            var model = await _db.Categorias.FindAsync(id);
+            var model = await _repository.Get(id);
             return View(model);
         }
 
@@ -49,26 +46,11 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Update(model);
-                await _db.SaveChangesAsync();
-
+                await _repository.Upsert(model);
                 return RedirectToAction("Index");
             }
 
             return View(model);
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> Deletar(int id)
-        {
-            var model = await _db.Categorias.FindAsync(id);
-
-            _db.Categorias.Remove(model);
-
-            await _db.SaveChangesAsync();
-
-            return RedirectToAction("Index");
         }
     }
 }

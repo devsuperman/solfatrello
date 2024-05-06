@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Dominio.Interfaces;
 using App.Extensions;
-using App.Data;
+using App.Services;
+using Dominio.Data;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions { ContentRootPath = AppContext.BaseDirectory });
 
@@ -10,6 +12,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<Contexto>(options =>
     options.UseNpgsql(ConnectionHelper.GetConnectionString(builder.Configuration)));
+
+builder.Services.AddScoped<ICategoriasRepository, CategoriasRepository>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(o =>

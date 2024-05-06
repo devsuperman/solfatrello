@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace App.Models;
+namespace Dominio.Models;
 
 public class Gasto
 {

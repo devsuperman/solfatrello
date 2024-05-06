@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using App.Models;
+using Dominio.Models;
 
-namespace App.Data;
+namespace Dominio.Data;
 
 public class Contexto : DbContext
 {

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using App.Models;
-using App.Data;
+using Dominio.Models;
+using Dominio.Data;
 
 namespace App.Controllers
 {

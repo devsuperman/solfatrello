@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Diagnostics;
+using Dominio.Data;
 using App.Models;
-using App.Data;
 
 namespace App.Controllers;
 

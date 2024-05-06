@@ -1,6 +1,7 @@
-﻿using Npgsql;
+﻿using Microsoft.Extensions.Configuration;
+using Npgsql;
 
-namespace App.Data;
+namespace Dominio.Data;
 
 public static class ConnectionHelper
 {

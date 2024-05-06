@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
-namespace App.Data;
+namespace Dominio.Data;
 
 public static class DataHelper
 {
     public static async Task ManageDataAsync(IServiceProvider svcProvider)
     {
         var dbContextSvc = svcProvider.GetRequiredService<Contexto>();
-        await dbContextSvc.Database.MigrateAsync();
+        // await dbContextSvc.Database.MigrateAsync();
     }
 }
