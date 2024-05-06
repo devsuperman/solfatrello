@@ -3,7 +3,7 @@ using Dominio.Interfaces;
 using Dominio.Models;
 using Dominio.Data;
 
-namespace App.Services;
+namespace NewApp.Services;
 
 public class CategoriasRepository(Contexto db) : ICategoriasRepository
 {
@@ -16,6 +16,7 @@ public class CategoriasRepository(Contexto db) : ICategoriasRepository
 
     public async Task<List<Categoria>> ListAll()
     {
+        Console.WriteLine("Carregou a lista");
         return await _db.Categorias.AsNoTracking().OrderBy(o => o.Nombre).ToListAsync();
     }
 
