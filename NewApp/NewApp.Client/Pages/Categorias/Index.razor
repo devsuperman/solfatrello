@@ -17,7 +17,7 @@
 </div>
 <hr>
 
-@if (lista is null)
+@if (!lista.Any())
 {
     <h2>loading</h2>
 }
@@ -38,7 +38,7 @@ else
 
 @code {
 
-    List<Categoria>? lista = null;
+    List<Categoria> lista = new();
 
     protected override async Task OnInitializedAsync()
     {

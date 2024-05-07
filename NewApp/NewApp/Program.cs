@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Dominio.Repositories;
 using Dominio.Interfaces;
-using NewApp.Components;
-using NewApp.Services;
 using Dominio.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +10,9 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddControllers();
+
 builder.Services.AddScoped<ICategoriasRepository, CategoriasRepository>();
+builder.Services.AddScoped<IGastosRepository, GastosRepository>();
 
 builder.Services.AddDbContext<Contexto>(options =>
     options.UseNpgsql(ConnectionHelper.GetConnectionString(builder.Configuration)));
@@ -48,7 +49,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 app.MapControllers();
 
-app.MapRazorComponents<App>()
+app.MapRazorComponents<NewApp.Components.App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(NewApp.Client._Imports).Assembly);

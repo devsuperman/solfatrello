@@ -6,14 +6,9 @@ namespace NewApp.Controllers
 {
     [ApiController]
     [Route("api/categorias")]
-    public class CategoriasController : ControllerBase
+    public class CategoriasController(ICategoriasRepository respository) : ControllerBase
     {
-        private readonly ICategoriasRepository _repository;
-
-        public CategoriasController(ICategoriasRepository respository)
-        {
-            _repository = respository;
-        }
+        private readonly ICategoriasRepository _repository = respository;
 
         [HttpGet]
         public async Task<IActionResult> Get()

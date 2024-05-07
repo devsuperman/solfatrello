@@ -6,5 +6,5 @@ public interface ICategoriasRepository
 {
     public Task<List<Categoria>> ListAll();
     public Task<Categoria> Get(int id); 
-    public Task<Categoria> Upsert(Categoria categoria);    
+    public Task<Categoria> Upsert(Categoria model);    
 }

@@ -2,43 +2,26 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Dominio.Interfaces;
 using Dominio.Models;
 using Dominio.Data;
 
 namespace App.Controllers
 {
     [Authorize]
-    public class GastosController : Controller
+    public class GastosController(Contexto db, IGastosRepository repository) : Controller
     {
-        private readonly Contexto _db;
-
-        public GastosController(Contexto db)
-        {
-            _db = db;
-        }
+        private readonly IGastosRepository _repository = repository;
+        private readonly Contexto _db = db;
 
         public async Task<IActionResult> Index(int categoriaId = 0, DateTime? mesAno = null)
         {
             mesAno ??= DateTime.Today;
-
-            var listaCategorias = await _db.Categorias.AsNoTracking().OrderBy(o=>o.Nombre).ToListAsync();
-
-            ViewData["selectCategorias"]= new SelectList(listaCategorias, "Id", "Nombre", categoriaId);
             ViewData["mesAno"] = mesAno.Value.ToString("yyyy-MM");
 
-            var query = _db.Gastos
-                .AsNoTrackingWithIdentityResolution()
-                .Include(a => a.Categoria)
-                .Where(w =>
-                    w.Fecha.Month == mesAno.Value.Month &&
-                    w.Fecha.Year == mesAno.Value.Year);
+            await CarregarViewDatas(categoriaId);            
 
-            if (categoriaId > 0)
-                query = query.Where(w => w.CategoriaId == categoriaId);
-
-            var lista = await query
-                .OrderByDescending(o => o.Fecha)
-                .ToListAsync();
+            var lista = await _repository.ListAll(mesAno.Value, categoriaId);
 
             return View(lista);
         }
@@ -51,8 +34,6 @@ namespace App.Controllers
             {
                 Fecha = DateTime.Today
             };
-
-            await CarregarViewDatas();
 
             return View(model);
         }
@@ -77,15 +58,11 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Add(model);
-                await _db.SaveChangesAsync();
-
+                await _repository.Upsert(model);
                 return RedirectToAction("Index");
             }
 
-
             await CarregarViewDatas();
-
             return View(model);
         }
 
@@ -103,27 +80,12 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Update(model);
-                await _db.SaveChangesAsync();
-
+                await _repository.Upsert(model);
                 return RedirectToAction("Index");
             }
 
             await CarregarViewDatas(model.CategoriaId);
             return View(model);
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> Deletar(int id)
-        {
-            var model = await _db.Gastos.FindAsync(id);
-
-            _db.Gastos.Remove(model);
-
-            await _db.SaveChangesAsync();
-
-            return RedirectToAction("Index");
         }
     }
 }

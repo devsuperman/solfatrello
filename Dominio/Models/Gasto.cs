@@ -9,7 +9,7 @@ public class Gasto
     public string Nombre { get; set; } = string.Empty;
 
     [Required, DataType(DataType.Date)]
-    public DateTime Fecha { get; set; }
+    public DateTime Fecha { get; set; } = DateTime.Today;
 
 
     [Required, DataType(DataType.Currency)]
@@ -18,5 +18,6 @@ public class Gasto
 
     [Required, Display(Name="Categoria")]
     public int CategoriaId { get; set; }
-    public Categoria Categoria { get; set; }
+
+    public Categoria? Categoria { get; set; }
 }

@@ -7,23 +7,15 @@ using System.Security.Claims;
 using System.Diagnostics;
 using Dominio.Data;
 using App.Models;
+using Dominio.Interfaces;
 
 namespace App.Controllers;
 
-public class HomeController : Controller
+public class HomeController(ILogger<HomeController> logger, Contexto db, IGastosRepository gastosRepository) : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly Contexto _db;
-
-    public HomeController(ILogger<HomeController> logger, Contexto db)
-    {
-        _logger = logger;
-        _db = db;
-    }
-
-
+    private readonly IGastosRepository gastosRepository = gastosRepository;
+    private readonly Contexto _db = db;
     public IActionResult Entrar() => View();
-
 
     [HttpPost]
     public async Task<IActionResult> Entrar(string senha, string returnUrl)
@@ -38,8 +30,7 @@ public class HomeController : Controller
 
         return RedirectToAction("Index");
     }
-
-
+    
     private async Task Logar()
     {
         var claims = new List<Claim>
@@ -59,8 +50,6 @@ public class HomeController : Controller
     }
 
 
-
-
     [Authorize]
     public async Task<IActionResult> Index(DateTime? mesAno = null)
     {
@@ -68,20 +57,7 @@ public class HomeController : Controller
 
         ViewData["mesAno"] = mesAno.Value.ToString("yyyy-MM");
 
-        var totaisPorCategoria = await _db.Gastos
-            .Where(w =>
-                w.Fecha.Month == mesAno.Value.Month &&
-                w.Fecha.Year == mesAno.Value.Year)
-            .Select(s => new
-            {
-                Categoria = s.Categoria.Nombre,
-                s.Valor
-            })
-            .GroupBy(g => g.Categoria)
-            .Select(s => new Tuple<string, decimal>(s.Key, s.Sum(d => d.Valor.Value)))
-            .ToListAsync();
-
-        totaisPorCategoria = totaisPorCategoria.OrderByDescending(o=>o.Item2).ToList();
+        var totaisPorCategoria = await gastosRepository.ListarPorCategoria(mesAno.Value);        
 
         return View(totaisPorCategoria);
     }
