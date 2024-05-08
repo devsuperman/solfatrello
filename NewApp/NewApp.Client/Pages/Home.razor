@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject ILogger<Home> _logger
 
 <PageTitle>Início</PageTitle>
 
@@ -9,7 +10,7 @@
     </h1>
 
     <div>
-        <InputDate Type="InputDateType.Month" class="form-control" @bind-Value="MesAno"/>
+        <InputDate Type="InputDateType.Month" class="form-control" @bind-Value="MesAno" @bind-Value:after="CarregarGastos"/>
     </div>
 
 </form>
@@ -51,13 +52,15 @@
     public List<Tuple<string, decimal>> Model { get; set; } = new();
     public DateTime MesAno { get; set; } = DateTime.Today;
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     await CarregarGastos();
-    // }
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarGastos();
+    }
 
     public async Task CarregarGastos()
     {
         Model = await _gastosRepository.ListarPorCategoria(MesAno);
     }    
+    
+
 }

@@ -10,8 +10,9 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions { ContentRo
 builder.Services.AddControllersWithViews();
 
 
-builder.Services.AddDbContext<Contexto>(options =>
-    options.UseNpgsql(ConnectionHelper.GetConnectionString(builder.Configuration)));
+builder.Services.AddDbContext<Contexto>(
+        options => options.UseNpgsql(ConnectionHelper.GetConnectionString(builder.Configuration), 
+        a => a.MigrationsAssembly("App")));
 
 builder.Services.AddScoped<ICategoriasRepository, CategoriasRepository>();
 builder.Services.AddScoped<IGastosRepository, GastosRepository>();

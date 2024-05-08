@@ -20,9 +20,17 @@
 <form class="row mb-4">
 
     <div class="mb-2 col-md-4">
-        <select class="form-select">
-            <option value="">Categorias</option>
-        </select>
+        <InputSelect class="form-select" @bind-Value="CategoriaId" @bind-Value:after="CarregarGastos">
+            <option value="0">Categorias</option>
+            
+            @if (listaCategorias is not null)
+            {
+                @foreach (var item in listaCategorias)
+                {
+                    <option value="@item.Id">@item.Nombre</option>
+                }                
+            }
+        </InputSelect>
     </div>
 
     <div class="mb-2 col-md-8">
@@ -30,22 +38,16 @@
         <div class="d-flex">
 
             <div class="flex-grow-1">
-                <input type="month" class="form-control">
+                <InputDate Type="InputDateType.Month" class="form-control" @bind-Value="MesAno" @bind-Value:after="CarregarGastos" />
             </div>
 
-            <div>
-                <button type="submit" class="btn btn-outline-primary">
-                    <i class="bi bi-search"></i>
-                    Consultar
-                </button>
-            </div>
         </div>
 
     </div>
 
 </form>
 
-@if (lista is null)
+@if (listaGastos is null)
 {
     <h2>Cargando...</h2>
 }
@@ -53,7 +55,7 @@ else
 {
 
     <div class="list-group">
-        @foreach (var item in lista)
+        @foreach (var item in listaGastos)
         {
             <a class="list-group-item list-group-item-action d-flex" href="/gastos/form/@item.Id">
                 <span class='flex-grow-1'>
@@ -69,12 +71,19 @@ else
 }
 
 @code {
-    List<Gasto> lista;
+    List<Gasto> listaGastos;
+    List<Categoria> listaCategorias;
     int CategoriaId { get; set; }
     DateTime MesAno { get; set; } = DateTime.Today;
 
     protected override async Task OnInitializedAsync()
     {
-        lista = await _gastosRepository.ListAll(MesAno, CategoriaId);
+        listaCategorias = await _categoriasRepository.ListAll();
+        await CarregarGastos();
+    }
+
+    public async Task CarregarGastos()
+    {
+        listaGastos = await _gastosRepository.ListAll(MesAno, CategoriaId);
     }
 }
