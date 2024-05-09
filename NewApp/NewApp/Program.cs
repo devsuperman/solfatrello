@@ -18,8 +18,9 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(x =>
     {
-        x.LoginPath = "/Login";
-        x.LogoutPath = "/Login";
+        x.LoginPath = "/login";
+        x.LogoutPath = "/login";
+        x.AccessDeniedPath = "/login";
         x.ExpireTimeSpan = new TimeSpan(5, 0, 0, 0);
     });
 

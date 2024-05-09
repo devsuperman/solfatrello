@@ -21,7 +21,7 @@ public class CategoriasRepository(Contexto db) : ICategoriasRepository
 
     public async Task<Categoria> Upsert(Categoria categoria)
     {
-        if (categoria.Id > 0)
+        if (categoria.Id == 0)
             await _db.AddAsync(categoria);
         else
             _db.Update(categoria);

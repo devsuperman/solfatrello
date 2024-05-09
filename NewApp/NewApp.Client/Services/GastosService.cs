@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using Dominio.Interfaces;
 using Dominio.Models;
+using Dominio.DTOs;
 
 namespace NewApp.Client.Services;
 
@@ -13,10 +14,10 @@ public class GastosService(HttpClient httpClient) : IGastosRepository
         return await _httpClient.GetFromJsonAsync<Gasto>($"/api/gastos/{id}");
     }
 
-    public async Task<List<Gasto>> ListAll(DateTime mesAno, int categoriaId)
+    public async Task<List<ListarGasto>> ListAll(DateTime mesAno, int categoriaId)
     {
         var url = $"/api/gastos?mesAno={mesAno:yyyy-MM}&categoriaId={categoriaId}";
-        return await _httpClient.GetFromJsonAsync<List<Gasto>>(url);
+        return await _httpClient.GetFromJsonAsync<List<ListarGasto>>(url);
     }
 
     public async Task<List<Tuple<string, decimal>>> ListarPorCategoria(DateTime mesAno)

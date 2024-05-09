@@ -32,15 +32,18 @@
 
 @code {
     
+    [CascadingParameter]
+    private Task<AuthenticationState>? _authenticationStateProvider { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
-        var state = await _authenticationStateProvider.GetAuthenticationStateAsync();    
+        @* var state = await _authenticationStateProvider.GetAuthenticationStateAsync();     *@
     }
 
     public async Task Login()
     {
-        var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
+        @* var state = await _authenticationStateProvider.GetAuthenticationStateAsync(); *@
         
         
     }

@@ -1,5 +1,4 @@
 ﻿@page "/login"
-@rendermode InteractiveServer
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Authentication
 @using System.ComponentModel.DataAnnotations
@@ -46,6 +45,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("INICIOU");
+
         if (HttpMethods.IsGet(HttpContext.Request.Method) && HttpContext.User.Identity.IsAuthenticated)
         {
             await HttpContext.SignOutAsync();
@@ -55,6 +56,8 @@
 
     public async Task LoginUser()
     {
+        Console.WriteLine("LOGIN");
+
         if (Model.Contrasena == "8318")
         {
             var claims = new List<Claim>

@@ -13,7 +13,7 @@
 <hr />
 
 
-<EditForm method="post" Model="Categoria" OnValidSubmit="Save" FormName="form" Enhance>
+<EditForm method="post" Model="Model" OnValidSubmit="Save" FormName="form" Enhance>
 
     <DataAnnotationsValidator />
 
@@ -21,8 +21,8 @@
 
     <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
-        <InputText id="nombre" @bind-Value="Categoria.Nombre" class="form-control" />
-        <ValidationMessage For="() => Categoria.Nombre" class="text-danger" />
+        <InputText id="nombre" @bind-Value="Model.Nombre" class="form-control" />
+        <ValidationMessage For="() => Model.Nombre" class="text-danger" />
     </div>
 
     <div class="d-flex justify-content-end">
@@ -49,17 +49,17 @@
     public int Id { get; set; }
 
     [SupplyParameterFromForm]
-    public Categoria Categoria { get; set; } = new();
+    public Categoria Model { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
         if (Id > 0)
-            Categoria = await _categoriasRepository.Get(Id);
+            Model = await _categoriasRepository.Get(Id);
     }
 
     public async Task Save()
     {
-        await _categoriasRepository.Upsert(Categoria);
+        await _categoriasRepository.Upsert(Model);
         _navigation.NavigateTo("/categorias");
     }
 }

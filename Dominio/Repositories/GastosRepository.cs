@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Dominio.Interfaces;
 using Dominio.Models;
+using Dominio.DTOs;
 using Dominio.Data;
 
 namespace Dominio.Repositories;
@@ -14,7 +15,7 @@ public class GastosRepository(Contexto db) : IGastosRepository
         return await _db.Gastos.FindAsync(id);
     }
 
-    public async Task<List<Gasto>> ListAll(DateTime mesAno, int categoriaId)
+    public async Task<List<ListarGasto>> ListAll(DateTime mesAno, int categoriaId)
     {
         var query = _db.Gastos
                 .AsNoTrackingWithIdentityResolution()
@@ -28,6 +29,15 @@ public class GastosRepository(Contexto db) : IGastosRepository
 
         var lista = await query
             .OrderByDescending(o => o.Fecha)
+            .Select(s=> new ListarGasto
+            {
+                Id = s.Id,
+                Fecha = s.Fecha,
+                Nombre = s.Nombre,
+                Valor = s.Valor.Value,
+                CategoriaId = s.CategoriaId,
+                Categoria = s.Categoria.Nombre
+            })
             .ToListAsync();
 
         return lista;

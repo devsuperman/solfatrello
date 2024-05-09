@@ -61,10 +61,10 @@ else
         {
             <a class="list-group-item list-group-item-action d-flex" href="/gastos/form/@item.Id">
                 <span class='flex-grow-1'>
-                    @item.Fecha.ToShortDateString() - @item.Categoria.Nombre @item.Nombre
+                    @item.Fecha.ToShortDateString() - @item.Categoria @item.Nombre
                 </span>
                 <span>
-                    R$ @item.Valor.Value.ToString("N2")
+                    R$ @item.Valor.ToString("N2")
                 </span>
             </a>
         }
@@ -73,7 +73,7 @@ else
 }
 
 @code {
-    List<Gasto> listaGastos;
+    List<ListarGasto> listaGastos;
     List<Categoria> listaCategorias;
     int CategoriaId { get; set; }
     DateTime MesAno { get; set; } = DateTime.Today;
