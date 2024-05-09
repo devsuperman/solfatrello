@@ -11,10 +11,9 @@ using Dominio.Interfaces;
 
 namespace App.Controllers;
 
-public class HomeController(ILogger<HomeController> logger, Contexto db, IGastosRepository gastosRepository) : Controller
+public class HomeController(ILogger<HomeController> logger, IGastosRepository gastosRepository) : Controller
 {
     private readonly IGastosRepository gastosRepository = gastosRepository;
-    private readonly Contexto _db = db;
     public IActionResult Entrar() => View();
 
     [HttpPost]
@@ -30,14 +29,14 @@ public class HomeController(ILogger<HomeController> logger, Contexto db, IGastos
 
         return RedirectToAction("Index");
     }
-    
+
     private async Task Logar()
     {
         var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, "Tiago"),
-                new Claim(ClaimTypes.NameIdentifier, "Tiago")
-            };
+        {
+            new(ClaimTypes.Name, "Tiago"),
+            new(ClaimTypes.NameIdentifier, "Tiago")
+        };
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var claimPrincipal = new ClaimsPrincipal(claimsIdentity);
@@ -57,14 +56,9 @@ public class HomeController(ILogger<HomeController> logger, Contexto db, IGastos
 
         ViewData["mesAno"] = mesAno.Value.ToString("yyyy-MM");
 
-        var totaisPorCategoria = await gastosRepository.ListarPorCategoria(mesAno.Value);        
+        var totaisPorCategoria = await gastosRepository.ListarPorCategoria(mesAno.Value);
 
         return View(totaisPorCategoria);
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

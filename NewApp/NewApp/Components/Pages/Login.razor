@@ -59,14 +59,15 @@
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, "Tiago"),
-                new Claim(ClaimTypes.NameIdentifier, "Tiago")
+                new (ClaimTypes.Name, "Tiago"),
+                new (ClaimTypes.NameIdentifier, "Tiago")
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var claimPrincipal = new ClaimsPrincipal(claimsIdentity);
+            var authProperties = new AuthenticationProperties { IsPersistent = true };
 
-            await HttpContext.SignInAsync(claimPrincipal);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, authProperties);
 
             if (!string.IsNullOrEmpty(ReturnUrl))
                 _navigation.NavigateTo(ReturnUrl);

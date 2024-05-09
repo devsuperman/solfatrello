@@ -1,27 +1,25 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Dominio.Interfaces;
 using Dominio.Models;
-using Dominio.Data;
 
 namespace App.Controllers
 {
     [Authorize]
-    public class GastosController(Contexto db, IGastosRepository repository) : Controller
+    public class GastosController(IGastosRepository gastosRepository, ICategoriasRepository categoriasRepository) : Controller
     {
-        private readonly IGastosRepository _repository = repository;
-        private readonly Contexto _db = db;
+        private readonly IGastosRepository _gastosRepository = gastosRepository;
+        private readonly ICategoriasRepository _categoriasRepository;
 
         public async Task<IActionResult> Index(int categoriaId = 0, DateTime? mesAno = null)
         {
             mesAno ??= DateTime.Today;
             ViewData["mesAno"] = mesAno.Value.ToString("yyyy-MM");
 
-            await CarregarViewDatas(categoriaId);            
+            await CarregarViewDatas(categoriaId);
 
-            var lista = await _repository.ListAll(mesAno.Value, categoriaId);
+            var lista = await _gastosRepository.ListAll(mesAno.Value, categoriaId);
 
             return View(lista);
         }
@@ -40,16 +38,7 @@ namespace App.Controllers
 
         private async Task CarregarViewDatas(int categoriaId = 0)
         {
-            var categorias = await _db.Categorias
-                .AsNoTracking()
-                .OrderBy(o => o.Nombre)
-                .Select(s => new
-                {
-                    s.Id,
-                    s.Nombre
-                })
-                .ToListAsync();
-
+            var categorias = await _categoriasRepository.ListAll();
             ViewData["selectCategorias"] = new SelectList(categorias, "Id", "Nombre", categoriaId);
         }
 
@@ -58,7 +47,7 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _repository.Upsert(model);
+                await _gastosRepository.Upsert(model);
                 return RedirectToAction("Index");
             }
 
@@ -68,7 +57,7 @@ namespace App.Controllers
 
         public async Task<IActionResult> Editar(int id)
         {
-            var model = await _db.Gastos.FindAsync(id);
+            var model = await _gastosRepository.Get(id);
 
             await CarregarViewDatas(model.CategoriaId);
 
@@ -80,7 +69,7 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _repository.Upsert(model);
+                await _gastosRepository.Upsert(model);
                 return RedirectToAction("Index");
             }
 
