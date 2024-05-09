@@ -4,6 +4,9 @@ using Dominio.Interfaces;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
+builder.Services.AddOptions();
+builder.Services.AddAuthorizationCore();
+
 builder.Services.AddScoped<ICategoriasRepository, CategoriasService>();
 builder.Services.AddScoped<IGastosRepository, GastosService>();
 

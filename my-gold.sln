@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App", "App\App.csproj", "{A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dominio", "Dominio\Dominio.csproj", "{B75FB67C-9C75-4369-A07C-C80A0D2F0827}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewApp", "NewApp\NewApp\NewApp.csproj", "{1D6CE111-4FF6-4C16-92CF-C4F0DFD9B5DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewApp", "NewApp\NewApp\NewApp.csproj", "{1D6CE111-4FF6-4C16-92CF-C4F0DFD9B5DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewApp.Client", "NewApp\NewApp.Client\NewApp.Client.csproj", "{0F2FBD7A-4F22-4184-B16F-6B29EB5C7BF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewApp.Client", "NewApp\NewApp.Client\NewApp.Client.csproj", "{0F2FBD7A-4F22-4184-B16F-6B29EB5C7BF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Dominio.Repositories;
 using Dominio.Interfaces;
@@ -6,11 +7,22 @@ using Dominio.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorComponents()    
+builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddControllers();
+
+builder.Services.AddCascadingAuthenticationState();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(x =>
+    {
+        x.LoginPath = "/Login";
+        x.LogoutPath = "/Login";
+        x.ExpireTimeSpan = new TimeSpan(5, 0, 0, 0);
+    });
+
 
 builder.Services.AddScoped<ICategoriasRepository, CategoriasRepository>();
 builder.Services.AddScoped<IGastosRepository, GastosRepository>();
