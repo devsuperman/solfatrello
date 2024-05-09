@@ -3,15 +3,15 @@
 version: '3.4'
 
 services:
-  app:
-    image: app
+  newapp:
+    image: newapp
     build:
       context: .
-      dockerfile: App/Dockerfile
+      dockerfile: NewApp/NewApp/Dockerfile
       args:
         - configuration=Debug
     ports:
-      - 5254:5254
+      - 5170:5170
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
