@@ -3,10 +3,10 @@
 version: '3.4'
 
 services:
-  app:
-    image: app
+  newapp:
+    image: newapp
     build:
       context: .
-      dockerfile: App/Dockerfile
+      dockerfile: NewApp/NewApp/Dockerfile
     ports:
-      - 5254:5254
+      - 5170:5170

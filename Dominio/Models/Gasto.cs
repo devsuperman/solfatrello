@@ -8,15 +8,20 @@ public class Gasto
 
     public string Nombre { get; set; } = string.Empty;
 
-    [Required, DataType(DataType.Date)]
-    public DateTime Fecha { get; set; }
+    [DataType(DataType.Date)]
+    [Required(ErrorMessage = "La Fecha es obligatoria")]
+    public DateTime Fecha { get; set; } = DateTime.Today;
 
 
-    [Required, DataType(DataType.Currency)]
+    [DataType(DataType.Currency)]
+    [Required(ErrorMessage = "El Valor es obligatorio")]
     public decimal? Valor { get; set; }
 
 
-    [Required, Display(Name="Categoria")]
+    [Range(1, int.MaxValue, ErrorMessage = "Elija una Categoria")]
+    [Display(Name = "Categoria")]
+    [Required(ErrorMessage = "La Categoria es obligatoria")]
     public int CategoriaId { get; set; }
-    public Categoria Categoria { get; set; }
+
+    public Categoria? Categoria { get; set; }
 }

@@ -1,0 +1,48 @@
+﻿@page "/auth"
+@inject ILogger<Home> _logger
+
+<PageTitle>Auth</PageTitle>
+
+ <AuthorizeView>
+     <Authorized>
+         <h1>
+         Autorizado!
+         </h1>
+     </Authorized>
+
+     <NotAuthorized>
+         <h1>
+             Não Autorizado!
+         </h1>
+
+         <button @onclick="Login">
+             Login
+         </button>
+     </NotAuthorized>
+
+     <Authorizing>
+         <h1>
+             Carregando Autorizaçao...
+         </h1>
+     </Authorizing>
+    
+ </AuthorizeView>
+
+
+
+@code {
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await _authenticationStateProvider.GetAuthenticationStateAsync();    
+    }
+
+    public async Task Login()
+    {
+        var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
+        
+        
+    }
+
+}

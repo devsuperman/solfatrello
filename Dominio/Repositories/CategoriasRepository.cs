@@ -3,7 +3,7 @@ using Dominio.Interfaces;
 using Dominio.Models;
 using Dominio.Data;
 
-namespace App.Services;
+namespace Dominio.Repositories;
 
 public class CategoriasRepository(Contexto db) : ICategoriasRepository
 {
@@ -19,7 +19,7 @@ public class CategoriasRepository(Contexto db) : ICategoriasRepository
         return await _db.Categorias.AsNoTracking().OrderBy(o => o.Nombre).ToListAsync();
     }
 
-    public async Task Upsert(Categoria categoria)
+    public async Task<Categoria> Upsert(Categoria categoria)
     {
         if (categoria.Id > 0)
             await _db.AddAsync(categoria);
@@ -27,5 +27,7 @@ public class CategoriasRepository(Contexto db) : ICategoriasRepository
             _db.Update(categoria);
 
         await _db.SaveChangesAsync();
+
+        return categoria;
     }
 }
