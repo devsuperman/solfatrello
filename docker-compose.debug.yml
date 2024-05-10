@@ -3,11 +3,11 @@
 version: '3.4'
 
 services:
-  newapp:
-    image: newapp
+  app:
+    image: app
     build:
       context: .
-      dockerfile: NewApp/NewApp/Dockerfile
+      dockerfile: App/Dockerfile
       args:
         - configuration=Debug
     ports:

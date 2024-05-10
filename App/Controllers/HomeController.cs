@@ -1,17 +1,15 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Diagnostics;
-using Dominio.Data;
-using App.Models;
 using Dominio.Interfaces;
+using System.Diagnostics;
+using App.Models;
 
 namespace App.Controllers;
 
-public class HomeController(ILogger<HomeController> logger, IGastosRepository gastosRepository) : Controller
+public class HomeController(IGastosRepository gastosRepository) : Controller
 {
     private readonly IGastosRepository gastosRepository = gastosRepository;
     public IActionResult Entrar() => View();

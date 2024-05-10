@@ -9,8 +9,8 @@ namespace App.Controllers
     [Authorize]
     public class GastosController(IGastosRepository gastosRepository, ICategoriasRepository categoriasRepository) : Controller
     {
+        private readonly ICategoriasRepository _categoriasRepository = categoriasRepository;
         private readonly IGastosRepository _gastosRepository = gastosRepository;
-        private readonly ICategoriasRepository _categoriasRepository;
 
         public async Task<IActionResult> Index(int categoriaId = 0, DateTime? mesAno = null)
         {
