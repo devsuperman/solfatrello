@@ -15,9 +15,9 @@
                 <span class="bi bi-house-door-fill-nav-menu"></span> Início
             </NavLink>
         </div>
-        
+
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="gastos" >
+            <NavLink class="nav-link" href="gastos">
                 <i class="bi bi-coin"></i>
                 Gastos
             </NavLink>
@@ -25,18 +25,44 @@
 
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="categorias">
-                <span class="bi bi-list-task-nav-menu"></span>                 
+                <span class="bi bi-list-task-nav-menu"></span>
                 Categorias
             </NavLink>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="login">
-                <i class="bi bi-door-open"></i>
-                Sair
-            </NavLink>
-        </div>
+        <AuthorizeView>
+
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="login">
+                        <i class="bi bi-door-open"></i>
+                        SAIR
+                    </NavLink>
+                </div>
+            </Authorized>
+
+
+            <NotAuthorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="login">
+                        <i class="bi bi-door-open"></i>
+                        ENTRAR
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+
+            <Authorizing>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="login">
+                        <i class="bi bi-door-open"></i>
+                        CARGANDO...
+                    </NavLink>
+                </div>
+            </Authorizing>
+        </AuthorizeView>
+
+
+
 
     </nav>
 </div>
-

@@ -11,9 +11,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddControllers();
-
 builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddControllers();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(x =>
@@ -23,7 +22,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         x.AccessDeniedPath = "/login";
         x.ExpireTimeSpan = new TimeSpan(5, 0, 0, 0);
     });
-
 
 builder.Services.AddScoped<ICategoriasRepository, CategoriasRepository>();
 builder.Services.AddScoped<IGastosRepository, GastosRepository>();
@@ -60,7 +58,7 @@ else
 }
 
 app.UsarCulturaEspecifica("es-ES");
-
+app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Components.Authorization;
 using NewApp.Client.Services;
 using Dominio.Interfaces;
 
@@ -6,7 +7,9 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
+builder.Services.AddCascadingAuthenticationState();
 
+builder.Services.AddScoped<AuthenticationStateProvider, MyAuthProvider>();
 builder.Services.AddScoped<ICategoriasRepository, CategoriasService>();
 builder.Services.AddScoped<IGastosRepository, GastosService>();
 
