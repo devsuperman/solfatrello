@@ -1,12 +1,4 @@
 ﻿@page "/login"
-@using System.Security.Claims
-@using Microsoft.AspNetCore.Authentication
-@using System.ComponentModel.DataAnnotations
-@using Microsoft.AspNetCore.Authentication.Cookies
-
-@rendermode InteractiveServer
-
-@inject ILogger<Login> Logger
 
 <PageTitle>Identifique-se</PageTitle>
 
@@ -35,7 +27,12 @@
 </div>
 
 @code {
-    
+    @inject ILogger<Login> Logger
+    @using System.ComponentModel.DataAnnotations
+    @inject Dominio.Interfaces.ITokenStorage _tokenStorage
+    @inject Dominio.Interfaces.IAutenticacaoService _autenticacaoService
+    @inject AuthenticationStateProvider _authenticationProvider
+
     [SupplyParameterFromForm]
     private LoginModel Model { get; set; } = new();
 
@@ -44,15 +41,20 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Logger.LogDebug("INICIOU");        
+        Logger.LogDebug("INICIOU");
     }
 
     public async Task LoginUser()
     {
         Logger.LogDebug("LOGIN");
 
-        if (Model.Contrasena == "8318")
+        var response = await _autenticacaoService.LoginAsync(Model.Contrasena);
+
+        if (response.Success)
         {
+            await _tokenStorage.Set(response.AccessToken);
+            await _authenticationProvider.GetAuthenticationStateAsync();
+
             if (!string.IsNullOrEmpty(ReturnUrl))
                 _navigation.NavigateTo(ReturnUrl);
 
@@ -61,6 +63,7 @@
         else
         {
             Model.ErrorMessage = "Senha incorreta";
+            Model.Contrasena = string.Empty;
         }
     }
 

@@ -11,7 +11,7 @@ public class CategoriasService(HttpClient httpClient) : ICategoriasRepository
     public async Task<Categoria> Get(int id)
     {
         return await _httpClient.GetFromJsonAsync<Categoria>($"/api/categorias/{id}");
-    }
+    }    
 
     public async Task<List<Categoria>> ListAll()
     {

@@ -1,29 +1,27 @@
-﻿using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using Dominio.Interfaces;
 
 namespace NewApp.Controllers
 {
     [ApiController]
     [Route("api/autenticacao")]
-    public partial class AutenticacaoController() : ControllerBase
+    public partial class AutenticacaoController(IAutenticacaoService autenticacaoService) : ControllerBase
     {
+        private readonly IAutenticacaoService _autenticacaoService = autenticacaoService;
+
         [HttpGet, Authorize]
         public IActionResult Get() => Ok($"Olá {User.Identity.Name}");
 
         [HttpPost]
-        public IResult Post(LoginRequest model)
+        public async Task<IActionResult> Post(LoginRequest model)
         {
-            if (model.password == "8318")
-            {
-                var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.Name, "Tiago")], BearerTokenDefaults.AuthenticationScheme));
-                return Results.SignIn(claimsPrincipal);
-            }
-            else
-            {
-                return Results.Ok("Login ou senha incorretos");
-            }
+            var response = await _autenticacaoService.LoginAsync(model.password);
+
+            if (response.Success)
+                return Ok(response);
+
+            return Ok(response.Message);
         }
 
         public record LoginRequest(string password);
