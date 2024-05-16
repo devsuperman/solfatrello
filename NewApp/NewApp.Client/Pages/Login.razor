@@ -1,10 +1,4 @@
 ﻿@page "/login"
-@using System.Security.Claims
-@using Microsoft.AspNetCore.Authentication
-@using System.ComponentModel.DataAnnotations
-@using Microsoft.AspNetCore.Authentication.Cookies
-
-@inject ILogger<Login> Logger
 
 <PageTitle>Identifique-se</PageTitle>
 
@@ -17,7 +11,7 @@
                 <DataAnnotationsValidator />
                 <div class="form-floating mb-3">
                     <InputText type="password" @bind-Value="Model.Contrasena" class="form-control"
-                        autocomplete="current-password" placeholder="contraseña" />
+                               autocomplete="current-password" placeholder="contraseña" />
                     <label for="password" class="form-label">Contraseña</label>
                     <ValidationMessage For="() => Model.Contrasena" class="text-danger" />
                     <span class="text-danger">@Model.ErrorMessage</span>
@@ -33,8 +27,11 @@
 </div>
 
 @code {
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; }
+    @inject ILogger<Login> Logger
+    @using System.ComponentModel.DataAnnotations
+    @inject Dominio.Interfaces.ITokenStorage _tokenStorage
+    @inject Dominio.Interfaces.IAutenticacaoService _autenticacaoService
+    @inject AuthenticationStateProvider _authenticationProvider
 
     [SupplyParameterFromForm]
     private LoginModel Model { get; set; } = new();
@@ -45,31 +42,18 @@
     protected override async Task OnInitializedAsync()
     {
         Logger.LogDebug("INICIOU");
-
-        if (HttpMethods.IsGet(HttpContext.Request.Method) && HttpContext.User.Identity.IsAuthenticated)
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            Logger.LogDebug("SAIU");
-        }
     }
 
     public async Task LoginUser()
     {
         Logger.LogDebug("LOGIN");
 
-        if (Model.Contrasena == "8318")
+        var response = await _autenticacaoService.LoginAsync(Model.Contrasena);
+
+        if (response.Success)
         {
-            var claims = new List<Claim>
-            {
-                new (ClaimTypes.Name, "Tiago"),
-                new (ClaimTypes.NameIdentifier, "Tiago")
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var claimPrincipal = new ClaimsPrincipal(claimsIdentity);
-            var authProperties = new AuthenticationProperties { IsPersistent = true, RedirectUri = "/login" };
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, authProperties);
+            await _tokenStorage.Set(response.AccessToken);
+            await _authenticationProvider.GetAuthenticationStateAsync();
 
             if (!string.IsNullOrEmpty(ReturnUrl))
                 _navigation.NavigateTo(ReturnUrl);
@@ -79,6 +63,7 @@
         else
         {
             Model.ErrorMessage = "Senha incorreta";
+            Model.Contrasena = string.Empty;
         }
     }
 

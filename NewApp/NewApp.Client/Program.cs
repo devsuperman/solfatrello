@@ -9,7 +9,9 @@ builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
 
-builder.Services.AddScoped<AuthenticationStateProvider, MyAuthProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider, ClientAuthenticationProvider>();
+builder.Services.AddScoped<ITokenStorage, LocalStorageToken>();
+builder.Services.AddScoped<IAutenticacaoService, AutenticacaoService>();
 builder.Services.AddScoped<ICategoriasRepository, CategoriasService>();
 builder.Services.AddScoped<IGastosRepository, GastosService>();
 

@@ -1,0 +1,18 @@
+﻿@page "/logout"
+
+<PageTitle>Identifique-se</PageTitle>
+
+@code {
+    @inject Dominio.Interfaces.ITokenStorage _tokenStorage
+    @inject AuthenticationStateProvider _auth;
+    @inject ILogger<Logout> _logger
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await _tokenStorage.Set("");
+        await _auth.GetAuthenticationStateAsync();
+        _logger.LogWarning("Limpou token");
+        _navigation.NavigateTo("/login");
+    }
+
+}
