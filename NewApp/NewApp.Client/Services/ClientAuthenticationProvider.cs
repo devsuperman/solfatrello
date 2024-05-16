@@ -6,16 +6,13 @@ using System.Text.Json;
 
 namespace NewApp.Client.Services;
 
-public class ClientAuthenticationProvider(ITokenStorage tokenStorage, HttpClient http, ILogger<ClientAuthenticationProvider> logger) : AuthenticationStateProvider
+public class ClientAuthenticationProvider(ITokenStorage tokenStorage, HttpClient http) : AuthenticationStateProvider
 {
-    private readonly ILogger<ClientAuthenticationProvider> _logger = logger;
     private readonly ITokenStorage _tokenStorage = tokenStorage;
     private readonly HttpClient _http = http;
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var token = await _tokenStorage.Get();
-
-        _logger.LogWarning($"CLIENT TOKEN: {token}");
 
         var identity = new ClaimsIdentity();
         _http.DefaultRequestHeaders.Authorization = null;

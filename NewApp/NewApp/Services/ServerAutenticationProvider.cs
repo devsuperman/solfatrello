@@ -5,16 +5,13 @@ using System.Text.Json;
 
 namespace NewApp.Services;
 
-public class ServerAutenticationProvider(ITokenStorage tokenStorage, ILogger<ServerAutenticationProvider> logger) : AuthenticationStateProvider
+public class ServerAutenticationProvider(ITokenStorage tokenStorage) : AuthenticationStateProvider
 {
     private readonly ITokenStorage _tokenStorage = tokenStorage;
-    private readonly ILogger<ServerAutenticationProvider> _logger = logger;
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var token = await _tokenStorage.Get();
-
-        _logger.LogWarning($"SERVER TOKEN: {token}");
 
         var identity = new ClaimsIdentity();
 
