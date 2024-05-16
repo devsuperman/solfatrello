@@ -10,7 +10,10 @@ public class ClientAuthenticationProvider(ITokenStorage tokenStorage, HttpClient
 {
     private readonly ITokenStorage _tokenStorage = tokenStorage;
     private readonly HttpClient _http = http;
-    public override async Task<AuthenticationState> GetAuthenticationStateAsync() => await LoadAuthenticationState();
+    public override async Task<AuthenticationState> GetAuthenticationStateAsync()
+    {
+        return await LoadAuthenticationState();
+    }
 
     private async Task<AuthenticationState> LoadAuthenticationState()
     {
@@ -19,29 +22,33 @@ public class ClientAuthenticationProvider(ITokenStorage tokenStorage, HttpClient
         var identity = new ClaimsIdentity();
 
         if (!string.IsNullOrEmpty(token))
+        {
             identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
+            _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+        else
+        {
+            _http.DefaultRequestHeaders.Authorization = null;
+        }
 
         var user = new ClaimsPrincipal(identity);
         var state = new AuthenticationState(user);
+
+        NotifyAuthenticationStateChanged(Task.FromResult(state));
+
         return state;
     }
 
     public async Task LoginAsync(string token)
     {
         await _tokenStorage.Set(token);
-        _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        
-        var state = await LoadAuthenticationState();
-        NotifyAuthenticationStateChanged(Task.FromResult(state));
+        await LoadAuthenticationState();
     }
 
     public async Task LogoutAsync()
     {
         await _tokenStorage.Set("");
-        _http.DefaultRequestHeaders.Authorization = null;
-
-        var state = await LoadAuthenticationState();
-        NotifyAuthenticationStateChanged(Task.FromResult(state));
+        await LoadAuthenticationState();
     }
     public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {

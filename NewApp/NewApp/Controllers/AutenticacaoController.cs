@@ -21,7 +21,7 @@ namespace NewApp.Controllers
             if (response.Success)
                 return Ok(response);
 
-            return Ok(response.Message);
+            return Ok(response);
         }
 
         public record LoginRequest(string password);

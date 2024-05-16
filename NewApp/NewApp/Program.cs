@@ -39,8 +39,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<AuthenticationStateProvider, ServerAutenticationProvider>();
 builder.Services.AddSingleton<JwtTokenGenerator>();
 builder.Services.AddScoped<ITokenStorage, SaveToken>();
-builder.Services.AddScoped<ICategoriasRepository, CategoriasRepository>();
 builder.Services.AddScoped<IAutenticacaoService, AutenticacaoService>();
+builder.Services.AddScoped<ICategoriasRepository, CategoriasRepository>();
 builder.Services.AddScoped<IGastosRepository, GastosRepository>();
 
 builder.Services.AddDbContext<Contexto>(
