@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Dominio.Repositories;
 using Dominio.Interfaces;
@@ -14,14 +13,11 @@ builder.Services.AddRazorComponents()
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddControllers();
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(x =>
-    {
-        x.LoginPath = "/login";
-        x.LogoutPath = "/login";
-        x.AccessDeniedPath = "/login";
-        x.ExpireTimeSpan = new TimeSpan(5, 0, 0, 0);
-    });
+builder.Services
+    .AddAuthentication()
+    .AddBearerToken();
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<ICategoriasRepository, CategoriasRepository>();
 builder.Services.AddScoped<IGastosRepository, GastosRepository>();
@@ -58,10 +54,13 @@ else
 }
 
 app.UsarCulturaEspecifica("es-ES");
-app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.MapRazorComponents<NewApp.Components.App>()

@@ -4,6 +4,8 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Authentication.Cookies
 
+@rendermode InteractiveServer
+
 @inject ILogger<Login> Logger
 
 <PageTitle>Identifique-se</PageTitle>
@@ -17,7 +19,7 @@
                 <DataAnnotationsValidator />
                 <div class="form-floating mb-3">
                     <InputText type="password" @bind-Value="Model.Contrasena" class="form-control"
-                        autocomplete="current-password" placeholder="contraseña" />
+                               autocomplete="current-password" placeholder="contraseña" />
                     <label for="password" class="form-label">Contraseña</label>
                     <ValidationMessage For="() => Model.Contrasena" class="text-danger" />
                     <span class="text-danger">@Model.ErrorMessage</span>
@@ -33,9 +35,7 @@
 </div>
 
 @code {
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; }
-
+    
     [SupplyParameterFromForm]
     private LoginModel Model { get; set; } = new();
 
@@ -44,13 +44,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Logger.LogDebug("INICIOU");
-
-        if (HttpMethods.IsGet(HttpContext.Request.Method) && HttpContext.User.Identity.IsAuthenticated)
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            Logger.LogDebug("SAIU");
-        }
+        Logger.LogDebug("INICIOU");        
     }
 
     public async Task LoginUser()
@@ -59,18 +53,6 @@
 
         if (Model.Contrasena == "8318")
         {
-            var claims = new List<Claim>
-            {
-                new (ClaimTypes.Name, "Tiago"),
-                new (ClaimTypes.NameIdentifier, "Tiago")
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var claimPrincipal = new ClaimsPrincipal(claimsIdentity);
-            var authProperties = new AuthenticationProperties { IsPersistent = true, RedirectUri = "/login" };
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, authProperties);
-
             if (!string.IsNullOrEmpty(ReturnUrl))
                 _navigation.NavigateTo(ReturnUrl);
 
