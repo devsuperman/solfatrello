@@ -29,9 +29,8 @@
 @code {
     @inject ILogger<Login> Logger
     @using System.ComponentModel.DataAnnotations
-    @inject Dominio.Interfaces.ITokenStorage _tokenStorage
-    @inject Dominio.Interfaces.IAutenticacaoService _autenticacaoService
     @inject AuthenticationStateProvider _authenticationProvider
+    @inject Dominio.Interfaces.IAutenticacaoService _autenticacaoService
 
     [SupplyParameterFromForm]
     private LoginModel Model { get; set; } = new();
@@ -52,8 +51,8 @@
 
         if (response.Success)
         {
-            await _tokenStorage.Set(response.AccessToken);
-            await _authenticationProvider.GetAuthenticationStateAsync();
+            var clientProvider = (NewApp.Client.Services.ClientAuthenticationProvider)_authenticationProvider;
+            await clientProvider.LoginAsync(response.AccessToken);
 
             if (!string.IsNullOrEmpty(ReturnUrl))
                 _navigation.NavigateTo(ReturnUrl);

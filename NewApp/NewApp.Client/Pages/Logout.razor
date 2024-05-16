@@ -3,15 +3,13 @@
 <PageTitle>Identifique-se</PageTitle>
 
 @code {
-    @inject Dominio.Interfaces.ITokenStorage _tokenStorage
     @inject AuthenticationStateProvider _auth;
     @inject ILogger<Logout> _logger
     
     protected override async Task OnInitializedAsync()
     {
-        await _tokenStorage.Set("");
-        await _auth.GetAuthenticationStateAsync();
-        _logger.LogWarning("Limpou token");
+        var clientProvider = (NewApp.Client.Services.ClientAuthenticationProvider)_auth;
+        await clientProvider.LogoutAsync();        
         _navigation.NavigateTo("/login");
     }
 
