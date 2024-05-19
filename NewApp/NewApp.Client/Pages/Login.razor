@@ -11,7 +11,7 @@
                 <DataAnnotationsValidator />
                 <div class="form-floating mb-3">
                     <InputText type="password" @bind-Value="Model.Contrasena" class="form-control"
-                               autocomplete="current-password" placeholder="contraseña" />
+                        autocomplete="current-password" placeholder="contraseña" />
                     <label for="password" class="form-label">Contraseña</label>
                     <ValidationMessage For="() => Model.Contrasena" class="text-danger" />
                     <span class="text-danger">@Model.ErrorMessage</span>
@@ -29,24 +29,16 @@
 @code {
     @inject ILogger<Login> Logger
     @using System.ComponentModel.DataAnnotations
-    @inject AuthenticationStateProvider _authenticationProvider
     @inject Dominio.Interfaces.IAutenticacaoService _autenticacaoService
-
+    
     [SupplyParameterFromForm]
     private LoginModel Model { get; set; } = new();
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        Logger.LogDebug("INICIOU");
-    }
-
     public async Task LoginUser()
     {
-        Logger.LogDebug("LOGIN");
-
         var response = await _autenticacaoService.LoginAsync(Model.Contrasena);
 
         if (response.Success)

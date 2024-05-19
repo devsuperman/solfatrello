@@ -6,10 +6,11 @@ using System.Text.Json;
 
 namespace NewApp.Client.Services;
 
-public class ClientAuthenticationProvider(ITokenStorage tokenStorage, HttpClient http) : AuthenticationStateProvider
+public class ClientAuthenticationProvider(ITokenStorage tokenStorage, HttpClient http, ILogger<ClientAuthenticationProvider> logger) : AuthenticationStateProvider
 {
-    private readonly ITokenStorage _tokenStorage = tokenStorage;
     private readonly HttpClient _http = http;
+    private readonly ITokenStorage _tokenStorage = tokenStorage;
+    private readonly ILogger<ClientAuthenticationProvider> _logger = logger;
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         return await LoadAuthenticationState();
@@ -34,7 +35,14 @@ public class ClientAuthenticationProvider(ITokenStorage tokenStorage, HttpClient
         var user = new ClaimsPrincipal(identity);
         var state = new AuthenticationState(user);
 
-        NotifyAuthenticationStateChanged(Task.FromResult(state));
+        try
+        {
+            NotifyAuthenticationStateChanged(Task.FromResult(state));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex.Message);
+        }
 
         return state;
     }

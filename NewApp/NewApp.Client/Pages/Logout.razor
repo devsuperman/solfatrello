@@ -3,12 +3,11 @@
 <PageTitle>Identifique-se</PageTitle>
 
 @code {
-    @inject AuthenticationStateProvider _auth;
     @inject ILogger<Logout> _logger
     
     protected override async Task OnInitializedAsync()
     {
-        var clientProvider = (NewApp.Client.Services.ClientAuthenticationProvider)_auth;
+        var clientProvider = (NewApp.Client.Services.ClientAuthenticationProvider)_authenticationProvider;
         await clientProvider.LogoutAsync();        
         _navigation.NavigateTo("/login");
     }

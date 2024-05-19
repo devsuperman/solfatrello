@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors(options =>
+builder.Services.AddCors(options => 
 {
     options.AddPolicy("AllowanyOrigin",
         builder => builder.AllowAnyOrigin()
@@ -74,9 +74,8 @@ app.UsarCulturaEspecifica("es-ES");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapControllers();
 
 app.UseCors("AllowanyOrigin");
-
-app.MapControllers();
 
 app.Run();
