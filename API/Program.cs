@@ -4,19 +4,24 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using Dominio.Repositories;
 using Dominio.Interfaces;
-using NewApp.Extensions;
-using NewApp.Services;
+using API.Extensions;
 using Dominio.Data;
+using API.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents()
-    .AddInteractiveWebAssemblyComponents();
-
-builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowanyOrigin",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -30,7 +35,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-            ClockSkew = TimeSpan.Zero            
+            ClockSkew = TimeSpan.Zero
         };
     });
 
@@ -45,12 +50,7 @@ builder.Services.AddScoped<IGastosRepository, GastosRepository>();
 
 builder.Services.AddDbContext<Contexto>(
         options => options.UseNpgsql(ConnectionHelper.GetConnectionString(builder.Configuration),
-        a => a.MigrationsAssembly("NewApp")));
-
-builder.Services.AddScoped(http => new HttpClient
-{
-    BaseAddress = new Uri(builder.Configuration.GetSection("BaseAddress").Value!)
-});
+        a => a.MigrationsAssembly("App3")));
 
 var portVar = Environment.GetEnvironmentVariable("PORT");
 
@@ -66,27 +66,17 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseWebAssemblyDebugging();
-}
-else
-{
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    app.UseHsts();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UsarCulturaEspecifica("es-ES");
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseAntiforgery();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseCors("AllowanyOrigin");
 
-app.MapRazorComponents<NewApp.Components.App>()
-    .AddInteractiveServerRenderMode()
-    .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(NewApp.Client._Imports).Assembly);
+app.MapControllers();
 
 app.Run();
