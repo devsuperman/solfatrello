@@ -1,18 +1,24 @@
 ﻿<Router AppAssembly="typeof(Program).Assembly">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)">
-              
-              <NotAuthorized>
-                
+
+            <Authorizing>
+                <h1>
+                    Carregando...
+                </h1>
+            </Authorizing>
+
+            <NotAuthorized>
                 <RedirectToLogin />
-              </NotAuthorized>
+            </NotAuthorized>
+
         </AuthorizeRouteView>
         <FocusOnNavigate RouteData="routeData" Selector="h1" />
     </Found>
     <NotFound>
         <LayoutView Layout="@typeof(Layout.MainLayout)">
             <h1>
-                NOT FOUND BABY                
+                NOT FOUND BABY
             </h1>
         </LayoutView>
     </NotFound>
