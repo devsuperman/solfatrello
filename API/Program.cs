@@ -11,10 +11,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services.AddCors(options => 
 {
     options.AddPolicy("AllowanyOrigin",
@@ -22,6 +18,11 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader()
                           .AllowAnyMethod());
 });
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -72,10 +73,9 @@ if (app.Environment.IsDevelopment())
 
 app.UsarCulturaEspecifica("es-ES");
 app.UseHttpsRedirection();
+app.UseCors("AllowanyOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
-app.UseCors("AllowanyOrigin");
 
 app.Run();
