@@ -19,15 +19,15 @@ public class HermanosRepository(Contexto db) : IHermanosRepository
         return await _db.Hermanos.AsNoTracking().OrderBy(o => o.Nombre).ToListAsync();
     }
 
-    public async Task<Hermano> Upsert(Hermano categoria)
+    public async Task<Hermano> Upsert(Hermano hermano)
     {
-        if (categoria.Id == 0)
-            await _db.AddAsync(categoria);
+        if (hermano.Id == 0)
+            await _db.AddAsync(hermano);
         else
-            _db.Update(categoria);
+            _db.Update(hermano);
 
         await _db.SaveChangesAsync();
 
-        return categoria;
+        return hermano;
     }
 }

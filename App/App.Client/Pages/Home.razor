@@ -1,0 +1,47 @@
+﻿@page "/"
+
+<PageTitle>Início</PageTitle>
+
+<form class="d-flex">
+
+    <h1 class="flex-grow-1">
+        Resumo de
+    </h1>
+
+    <div>
+        <InputDate Type="InputDateType.Month" class="form-control" @bind-Value="MesAno" @bind-Value:after="CarregarTareas" />
+    </div>
+
+</form>
+
+<hr>
+
+
+    <div class='d-flex justify-content-end mt-4'>
+        <a href="/tareas/form" class='btn btn-primary'>
+            <i class="bi bi-coin"></i>
+            Añadir Tarea
+        </a>
+    </div>
+
+@code {
+    public DateTime MesAno { get; set; } = DateTime.Today;
+    @inject AuthenticationStateProvider _auth;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarTareas();
+    }
+
+    public async Task CarregarTareas()
+    {
+        var state = await _auth.GetAuthenticationStateAsync();
+
+        if (state.User.Identity.IsAuthenticated)
+        {
+            
+        }
+    }
+
+
+}
