@@ -74,13 +74,13 @@
     public int Id { get; set; }
 
     [SupplyParameterFromForm]
-    public Gasto Model { get; set; } = new();
+    public Tarea Model { get; set; } = new();
 
-    public List<Categoria> Categorias { get; set; } = new();
+    public List<Hermano> Categorias { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        Categorias = await _categoriasRepository.ListAll();
+        Categorias = await _categoriasRepository.GetAll();
 
         if (Id > 0)
             Model = await _gastosRepository.Get(Id);

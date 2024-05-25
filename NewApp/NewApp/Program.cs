@@ -41,8 +41,8 @@ builder.Services.AddScoped<AuthenticationStateProvider, ServerAutenticationProvi
 builder.Services.AddSingleton<JwtTokenGenerator>();
 builder.Services.AddScoped<ITokenStorage, SaveToken>();
 builder.Services.AddScoped<IAutenticacaoService, AutenticacaoService>();
-builder.Services.AddScoped<ICategoriasRepository, CategoriasRepository>();
-builder.Services.AddScoped<IGastosRepository, GastosRepository>();
+builder.Services.AddScoped<IHermanosRepository, HermanosRepository>();
+builder.Services.AddScoped<ITareasRepository, TareasRepository>();
 
 builder.Services.AddDbContext<Contexto>(
         options => options.UseNpgsql(ConnectionHelper.GetConnectionString(builder.Configuration),

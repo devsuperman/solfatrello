@@ -61,7 +61,7 @@ else
         {
             <a class="list-group-item list-group-item-action d-flex" href="/gastos/form/@item.Id">
                 <span class='flex-grow-1'>
-                    @item.Fecha.ToShortDateString() - @item.Categoria @item.Nombre
+                    @item.Fecha.ToShortDateString() - @item.Categoria @item.Descripcion
                 </span>
                 <span>
                     R$ @item.Valor.ToString("N2")
@@ -73,14 +73,14 @@ else
 }
 
 @code {
-    List<ListarGasto> listaGastos;
-    List<Categoria> listaCategorias;
+    List<ListarTarea> listaGastos;
+    List<Hermano> listaCategorias;
     int CategoriaId { get; set; }
     DateTime MesAno { get; set; } = DateTime.Today;
 
     protected override async Task OnInitializedAsync()
     {
-        listaCategorias = await _categoriasRepository.ListAll();
+        listaCategorias = await _categoriasRepository.GetAll();
         await CarregarGastos();
     }
 

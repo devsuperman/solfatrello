@@ -40,10 +40,10 @@ else
 
 @code {
 
-    List<Categoria> lista;
+    List<Hermano> lista;
     
     protected override async Task OnInitializedAsync()
     {
-        lista = await _categoriasRepository.ListAll();
+        lista = await _categoriasRepository.GetAll();
     }
 }

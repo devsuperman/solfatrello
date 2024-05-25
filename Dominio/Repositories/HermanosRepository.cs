@@ -5,21 +5,21 @@ using Dominio.Data;
 
 namespace Dominio.Repositories;
 
-public class CategoriasRepository(Contexto db) : ICategoriasRepository
+public class HermanosRepository(Contexto db) : IHermanosRepository
 {
     private readonly Contexto _db = db;
 
-    public async Task<Categoria> Get(int id)
+    public async Task<Hermano> Get(int id)
     {
-        return await _db.Categorias.FindAsync(id);
+        return await _db.Hermanos.FindAsync(id);
     }
 
-    public async Task<List<Categoria>> ListAll()
+    public async Task<List<Hermano>> GetAll()
     {
-        return await _db.Categorias.AsNoTracking().OrderBy(o => o.Nombre).ToListAsync();
+        return await _db.Hermanos.AsNoTracking().OrderBy(o => o.Nombre).ToListAsync();
     }
 
-    public async Task<Categoria> Upsert(Categoria categoria)
+    public async Task<Hermano> Upsert(Hermano categoria)
     {
         if (categoria.Id == 0)
             await _db.AddAsync(categoria);

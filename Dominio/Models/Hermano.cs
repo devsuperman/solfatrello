@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dominio.Models;
 
-public class Categoria
+public class Hermano
 {
     public int Id { get; set; }
 

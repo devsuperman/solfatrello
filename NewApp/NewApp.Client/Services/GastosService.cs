@@ -5,31 +5,31 @@ using Dominio.DTOs;
 
 namespace NewApp.Client.Services;
 
-public class GastosService(HttpClient httpClient) : IGastosRepository
+public class GastosService(HttpClient httpClient) : ITareasRepository
 {
     private readonly HttpClient _httpClient = httpClient;
 
-    public async Task<Gasto> Get(int id)
+    public async Task<Tarea> Get(int id)
     {
-        return await _httpClient.GetFromJsonAsync<Gasto>($"/api/gastos/{id}");
+        return await _httpClient.GetFromJsonAsync<Tarea>($"/api/gastos/{id}");
     }
 
-    public async Task<List<ListarGasto>> ListAll(DateTime mesAno, int categoriaId)
+    public async Task<List<ListarTarea>> ListAll(DateTime mesAno, int categoriaId)
     {
         var url = $"/api/gastos?mesAno={mesAno:yyyy-MM}&categoriaId={categoriaId}";
-        return await _httpClient.GetFromJsonAsync<List<ListarGasto>>(url);
+        return await _httpClient.GetFromJsonAsync<List<ListarTarea>>(url);
     }
 
-    public async Task<List<Tuple<string, decimal>>> ListarPorCategoria(DateTime mesAno)
+    public async Task<List<Tuple<string, decimal>>> ListarPorHermano(DateTime mesAno)
     {
         var url = $"/api/gastos/listarPorCategoria?mesAno={mesAno:yyyy-MM}";
         return await _httpClient.GetFromJsonAsync<List<Tuple<string, decimal>>>(url);
     }
 
-    public async Task<Gasto> Upsert(Gasto categoria)
+    public async Task<Tarea> Upsert(Tarea categoria)
     {
         var client = await _httpClient.PostAsJsonAsync("/api/gastos", categoria);
-        var response = await client.Content.ReadFromJsonAsync<Gasto>();
+        var response = await client.Content.ReadFromJsonAsync<Tarea>();
         return response;
     }
 }

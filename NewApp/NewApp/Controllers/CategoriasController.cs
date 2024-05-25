@@ -8,14 +8,14 @@ namespace NewApp.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/categorias")]
-public class CategoriasController(ICategoriasRepository respository) : ControllerBase
+public class CategoriasController(IHermanosRepository respository) : ControllerBase
 {
-    private readonly ICategoriasRepository _repository = respository;
+    private readonly IHermanosRepository _repository = respository;
 
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var lista = await _repository.ListAll();
+        var lista = await _repository.GetAll();
         return Ok(lista);
     }
 
@@ -28,7 +28,7 @@ public class CategoriasController(ICategoriasRepository respository) : Controlle
 
 
     [HttpPost]
-    public async Task<IActionResult> Post(Categoria model)
+    public async Task<IActionResult> Post(Hermano model)
     {
         if (ModelState.IsValid)
         {

@@ -8,9 +8,9 @@ namespace NewApp.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/gastos")]
-public class GastosController(IGastosRepository repository) : ControllerBase
+public class GastosController(ITareasRepository repository) : ControllerBase
 {
-    private readonly IGastosRepository _repository = repository;
+    private readonly ITareasRepository _repository = repository;
 
     [HttpGet]
     public async Task<IActionResult> GetAll(int categoriaId = 0, DateTime? mesAno = null)
@@ -23,7 +23,7 @@ public class GastosController(IGastosRepository repository) : ControllerBase
     [HttpGet("ListarPorCategoria")]
     public async Task<IActionResult> ListarPorCategoria(DateTime mesAno)
     {
-        var lista = await _repository.ListarPorCategoria(mesAno);
+        var lista = await _repository.ListarPorHermano(mesAno);
         return Ok(lista);
     }
 
@@ -35,7 +35,7 @@ public class GastosController(IGastosRepository repository) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Upsert(Gasto model)
+    public async Task<IActionResult> Upsert(Tarea model)
     {
         if (ModelState.IsValid)
         {
