@@ -10,9 +10,10 @@ public class TareasRepository(Contexto db) : ITareasRepository
 {
     private readonly Contexto _db = db;
 
-    public async Task<Tarea> Get(int id)
+    public async Task<ListarTarea> Get(int id)
     {
-        return await _db.Tareas.FindAsync(id);
+        var entity = await _db.Tareas.FindAsync(id);
+        return new ListarTarea(entity);
     }
 
     public async Task<List<ListarTarea>> GetAll()
@@ -21,28 +22,28 @@ public class TareasRepository(Contexto db) : ITareasRepository
             .AsNoTrackingWithIdentityResolution()
             .Include(a => a.Hermano)
             .OrderByDescending(o => o.Fecha)
-            .Select(s => new ListarTarea
-            {
-                Id = s.Id,
-                Fecha = s.Fecha,
-                Descripcion = s.Descripcion,
-                HermanoId = s.HermanoId,
-                Hermano = s.Hermano.Nombre
-            })
+            .Select(s => new ListarTarea(s))
             .ToListAsync();
 
         return lista;
     }
 
-    public async Task<Tarea> Upsert(Tarea model)
+    public async Task<FormTarea> Upsert(FormTarea model)
     {
+        var entity = new Tarea(model);
+
         if (model.Id == 0)
-            await _db.AddAsync(model);
+            await _db.AddAsync(entity);
         else
-            _db.Update(model);
+        {
+            entity = await _db.Tareas.FindAsync(model.Id);
+            entity.Update(model);
+            _db.Update(entity);
+        }
 
         await _db.SaveChangesAsync();
 
+        model.Id = entity.Id;
         return model;
     }
 }

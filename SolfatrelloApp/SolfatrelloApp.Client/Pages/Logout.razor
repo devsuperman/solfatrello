@@ -1,0 +1,15 @@
+﻿@page "/logout"
+
+<PageTitle>Identifique-se</PageTitle>
+
+@code {
+    @inject ILogger<Logout> _logger
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var clientProvider = (SolfatrelloApp.Client.Services.ClientAuthenticationProvider)_authenticationProvider;
+        await clientProvider.LogoutAsync();        
+        _navigation.NavigateTo("/login");
+    }
+
+}

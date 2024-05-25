@@ -1,4 +1,3 @@
-using Dominio.Models;
 using Dominio.DTOs;
 
 namespace Dominio.Interfaces;
@@ -6,6 +5,6 @@ namespace Dominio.Interfaces;
 public interface ITareasRepository
 {
     public Task<List<ListarTarea>> GetAll();
-    public Task<Tarea> Get(int id); 
-    public Task<Tarea> Upsert(Tarea model);
+    public Task<ListarTarea> Get(int id); 
+    public Task<FormTarea> Upsert(FormTarea model);
 }
