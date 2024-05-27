@@ -14,7 +14,7 @@ public class ListarTarea
         Descripcion = model.Descripcion;
         Fecha = model.Fecha;
         HermanoId = model.HermanoId;
-        Hermano = model.Hermano.Nombre;
+        Hermano = model.Hermano?.Nombre;
     }
 
     public int Id { get; set; }
