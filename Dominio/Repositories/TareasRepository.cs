@@ -3,6 +3,7 @@ using Dominio.Interfaces;
 using Dominio.Models;
 using Dominio.DTOs;
 using Dominio.Data;
+using System.IO.Compression;
 
 namespace Dominio.Repositories;
 
@@ -12,15 +13,20 @@ public class TareasRepository(Contexto db) : ITareasRepository
 
     public async Task<ListarTarea> Get(int id)
     {
-        var entity = await _db.Tareas.FindAsync(id);
+        var entity = await _db.Tareas
+            .AsNoTracking()
+            .Include(a => a.Hermano)
+            .SingleOrDefaultAsync(a => a.Id == id);
+
         return new ListarTarea(entity);
     }
 
-    public async Task<List<ListarTarea>> GetAll()
+    public async Task<List<ListarTarea>> GetAll(int hermanoId = 0)
     {
         var lista = await _db.Tareas
             .AsNoTrackingWithIdentityResolution()
             .Include(a => a.Hermano)
+            .Where(w => hermanoId == 0 || w.HermanoId == hermanoId)
             .OrderByDescending(o => o.Fecha)
             .Select(s => new ListarTarea(s))
             .ToListAsync();

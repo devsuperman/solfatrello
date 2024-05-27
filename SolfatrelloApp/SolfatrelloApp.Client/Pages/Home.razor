@@ -5,43 +5,74 @@
 <form class="d-flex">
 
     <h1 class="flex-grow-1">
-        Resumo de
+        Início
     </h1>
 
     <div>
-        <InputDate Type="InputDateType.Month" class="form-control" @bind-Value="MesAno" @bind-Value:after="CarregarTareas" />
+
+        <InputSelect class="form-select" @bind-Value="HermanoId" @bind-Value:after="CarregarTareas">
+            <option value="0">Todos los Hermanos</option>
+
+            @if (listaHermanos is not null)
+            {
+                @foreach (var item in listaHermanos)
+                {
+                    <option value="@item.Id">@item.Nombre</option>
+                }
+            }
+        </InputSelect>
     </div>
 
 </form>
 
 <hr>
 
+<div class="row">
 
-    <div class='d-flex justify-content-end mt-4'>
-        <a href="/tareas/form" class='btn btn-primary'>
-            <i class="bi bi-coin"></i>
-            Añadir Tarea
-        </a>
+    <div class="col-lg-4">
+        <CardsTareas Title="😮 Hoy" ListaTareas="tareasHoy" Color="border-success-subtle bg-success-subtle"/>
     </div>
 
+    <div class="col-lg-4">
+        <CardsTareas Title="🫡 Proximas" ListaTareas="tareasProximas" Color="border-info-subtle bg-info-subtle"/>
+    </div>
+
+    <div class="col-lg-4">
+        <CardsTareas Title="😊 Pasadas" ListaTareas="tareasPasadas"/>
+    </div>
+
+</div>
+
+<div class='d-flex justify-content-end mt-4'>
+    <a href="/tareas/form" class='btn btn-primary'>
+        <i class="bi bi-coin"></i>
+        Añadir Tarea
+    </a>
+</div>
+
 @code {
-    public DateTime MesAno { get; set; } = DateTime.Today;
-    @inject AuthenticationStateProvider _auth;
+    List<Hermano> listaHermanos;
+    List<ListarTarea> listaTareas;
+    List<ListarTarea> tareasHoy;
+    List<ListarTarea> tareasPasadas;
+    List<ListarTarea> tareasProximas;
+
+    int HermanoId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        listaHermanos = await _hermanosRepository.GetAll();
         await CarregarTareas();
     }
 
     public async Task CarregarTareas()
     {
-        var state = await _auth.GetAuthenticationStateAsync();
+        Console.WriteLine($"HermanoId: {HermanoId}");
+        listaTareas = await _tareasRepository.GetAll(HermanoId);
 
-        if (state.User.Identity.IsAuthenticated)
-        {
-            
-        }
+        var hoy = DateTime.Today;
+        tareasProximas = listaTareas.Where(w => w.Fecha.Date > hoy).ToList();
+        tareasHoy = listaTareas.Where(w => w.Fecha.Date == hoy).ToList();
+        tareasPasadas = listaTareas.Where(w => w.Fecha.Date < hoy).ToList();
     }
-
-
 }

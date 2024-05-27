@@ -13,9 +13,9 @@ public class TareasService(HttpClient httpClient) : ITareasRepository
         return await _httpClient.GetFromJsonAsync<ListarTarea>($"/api/tareas/{id}");
     }
 
-    public async Task<List<ListarTarea>> GetAll()
+    public async Task<List<ListarTarea>> GetAll(int hermanoId = 0)
     {
-        var url = $"/api/tareas";
+        var url = $"/api/tareas?hermanoId={hermanoId}";
         return await _httpClient.GetFromJsonAsync<List<ListarTarea>>(url);
     }
 

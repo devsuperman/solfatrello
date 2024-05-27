@@ -1,0 +1,51 @@
+@if (ListaTareas is null)
+{
+    <p>
+        Cargando...
+    </p>
+}
+else if (ListaTareas.Any())
+{
+    <div class="border @Color rounded-1   mb-2 p-4">
+
+        <h2>
+            @Title
+        </h2>
+
+        @if (ListaTareas is null)
+        {
+            <p>
+                Cargando...
+            </p>
+        }
+        else
+        {
+
+            @foreach (var item in ListaTareas)
+            {
+                <div class="card mb-2 bg-body-tertiary">
+                    <div class="card-body">
+                        @item.Fecha.ToString("dd/MM") - @item.Hermano <br />
+                        <span class="text-muted">
+                            @item.Descripcion
+                        </span>
+                    </div>
+                </div>
+
+            }
+        }
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public List<ListarTarea>? ListaTareas { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Color {get;set;}
+
+}

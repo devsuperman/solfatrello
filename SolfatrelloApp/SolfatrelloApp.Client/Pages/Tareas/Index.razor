@@ -18,33 +18,19 @@
 </div>
 <hr>
 
-<form class="row mb-4">
+<form class="mb-2">
 
-    <div class="mb-2 col-md-4">
-        <InputSelect class="form-select" @bind-Value="HermanoId" @bind-Value:after="CarregarTareas">
-            <option value="0">Hermanos</option>
-            
-            @if (listaHermanos is not null)
+    <InputSelect class="form-select" @bind-Value="HermanoId" @bind-Value:after="Filtrar">
+        <option value="0">Todos los Hermanos</option>
+
+        @if (listaHermanos is not null)
+        {
+            @foreach (var item in listaHermanos)
             {
-                @foreach (var item in listaHermanos)
-                {
-                    <option value="@item.Id">@item.Nombre</option>
-                }                
+                <option value="@item.Id">@item.Nombre</option>
             }
-        </InputSelect>
-    </div>
-
-    <div class="mb-2 col-md-8">
-
-        <div class="d-flex">
-
-            <div class="flex-grow-1">
-                <InputDate Type="InputDateType.Month" class="form-control" @bind-Value="MesAno" @bind-Value:after="CarregarTareas" />
-            </div>
-
-        </div>
-
-    </div>
+        }
+    </InputSelect>
 
 </form>
 
@@ -58,11 +44,13 @@ else
     <div class="list-group">
         @foreach (var item in listaTareas)
         {
-            <a class="list-group-item list-group-item-action d-flex" href="/tareas/form/@item.Id">
-                <span class='flex-grow-1'>
-                    @item.Fecha.ToShortDateString() - @item.Hermano
-                </span>
+            <a class="list-group-item list-group-item-action" href="/tareas/form/@item.Id">
                 <span>
+                    @item.Fecha.ToString("dd/MM") - @item.Hermano
+                    <br>
+                </span>
+
+                <span class='text-muted'>
                     @item.Descripcion
                 </span>
             </a>
@@ -74,17 +62,18 @@ else
 @code {
     List<ListarTarea> listaTareas;
     List<Hermano> listaHermanos;
+
     int HermanoId { get; set; }
     DateTime MesAno { get; set; } = DateTime.Today;
 
     protected override async Task OnInitializedAsync()
     {
         listaHermanos = await _hermanosRepository.GetAll();
-        await CarregarTareas();
+        listaTareas = await _tareasRepository.GetAll(HermanoId);
     }
 
-    public async Task CarregarTareas()
+    public async Task Filtrar()
     {
-        listaTareas = await _tareasRepository.GetAll();
+        listaTareas = await _tareasRepository.GetAll(HermanoId);
     }
 }

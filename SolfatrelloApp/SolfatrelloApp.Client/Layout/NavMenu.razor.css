@@ -94,8 +94,9 @@
 }
 
 
-.nav-link>i{
-    margin-bottom:2rem;
-    height:16px;
+.nav-link > i {
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+    height: 16px;
     width: 16px;
 }

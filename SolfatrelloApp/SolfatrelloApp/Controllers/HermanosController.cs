@@ -5,7 +5,6 @@ using Dominio.Models;
 
 namespace SolfatrelloApp.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("api/hermanos")]
 public class HermanosController(IHermanosRepository respository) : ControllerBase
@@ -26,7 +25,7 @@ public class HermanosController(IHermanosRepository respository) : ControllerBas
         return Ok(model);
     }
 
-
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Post(Hermano model)
     {

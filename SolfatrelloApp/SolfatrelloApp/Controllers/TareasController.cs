@@ -5,7 +5,6 @@ using Dominio.DTOs;
 
 namespace SolfatrelloApp.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("api/tareas")]
 public class TareasController(ITareasRepository repository) : ControllerBase
@@ -13,9 +12,9 @@ public class TareasController(ITareasRepository repository) : ControllerBase
     private readonly ITareasRepository _repository = repository;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(int hermanoId = 0)
     {
-        var lista = await _repository.GetAll();
+        var lista = await _repository.GetAll(hermanoId);
         return Ok(lista);
     }
     
@@ -26,6 +25,7 @@ public class TareasController(ITareasRepository repository) : ControllerBase
         return Ok(model);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Upsert(FormTarea model)
     {
