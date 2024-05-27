@@ -76,6 +76,9 @@ else
     app.UseHsts();
 }
 
+var scope = app.Services.CreateScope();
+await DataHelper.ManageDataAsync(scope.ServiceProvider);
+
 app.UsarCulturaEspecifica("es-ES");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
