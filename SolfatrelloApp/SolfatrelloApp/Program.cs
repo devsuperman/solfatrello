@@ -47,7 +47,7 @@ builder.Services.AddScoped<ITareasRepository, TareasRepository>();
 
 builder.Services.AddDbContext<Contexto>(
         options => options.UseNpgsql(ConnectionHelper.GetConnectionString(builder.Configuration),
-        a => a.MigrationsAssembly("App")));
+        a => a.MigrationsAssembly("SolfatrelloApp")));
 
 builder.Services.AddScoped(http => new HttpClient
 {
