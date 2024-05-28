@@ -3,7 +3,6 @@ using Dominio.Interfaces;
 using Dominio.Models;
 using Dominio.DTOs;
 using Dominio.Data;
-using System.IO.Compression;
 
 namespace Dominio.Repositories;
 
@@ -23,15 +22,28 @@ public class TareasRepository(Contexto db) : ITareasRepository
 
     public async Task<List<ListarTarea>> GetAll(int hermanoId = 0)
     {
-        var lista = await _db.Tareas
-            .AsNoTrackingWithIdentityResolution()
-            .Include(a => a.Hermano)
-            .Where(w => hermanoId == 0 || w.HermanoId == hermanoId)
-            .OrderByDescending(o => o.Fecha)
-            .Select(s => new ListarTarea(s))
-            .ToListAsync();
+        try
+        {
+            var lista = await _db.Tareas
+                .AsNoTrackingWithIdentityResolution()
+                .Include(a => a.Hermano)
+                .Where(w => hermanoId == 0 || w.HermanoId == hermanoId)
+                .OrderByDescending(o => o.Fecha)
+                .Select(s => new ListarTarea(s))
+                .ToListAsync();
 
-        return lista;
+            return lista;            
+        }
+        catch (Npgsql.PostgresException ex) 
+        {
+            if(ex.Message.Contains("starting up"))
+            {
+                await Task.Delay(5000);
+                return await GetAll(hermanoId);
+            }
+
+            throw;
+        }
     }
 
     public async Task<FormTarea> Upsert(FormTarea model)

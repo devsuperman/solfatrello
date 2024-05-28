@@ -16,7 +16,20 @@ public class HermanosRepository(Contexto db) : IHermanosRepository
 
     public async Task<List<Hermano>> GetAll()
     {
-        return await _db.Hermanos.AsNoTracking().OrderBy(o => o.Nombre).ToListAsync();
+        try
+        {
+            return await _db.Hermanos.AsNoTracking().OrderBy(o => o.Nombre).ToListAsync();
+        }
+        catch (Npgsql.PostgresException ex)
+        {
+            if (ex.Message.Contains("starting up"))
+            {
+                await Task.Delay(5000);
+                return await GetAll();
+            }
+
+            throw;
+        }
     }
 
     public async Task<Hermano> Upsert(Hermano hermano)
