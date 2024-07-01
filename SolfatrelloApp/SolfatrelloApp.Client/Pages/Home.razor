@@ -64,7 +64,7 @@
         listaTareas = await _tareasRepository.GetAll(HermanoId);
 
         var hoy = DateTime.Today;
-        tareasProximas = listaTareas.Where(w => w.Fecha.Date > hoy).ToList();
+        tareasProximas = listaTareas.Where(w => w.Fecha.Date > hoy).OrderBy(o=>o.Fecha).ToList();
         tareasHoy = listaTareas.Where(w => w.Fecha.Date == hoy).ToList();
         tareasPasadas = listaTareas.Where(w => w.Fecha.Date < hoy).ToList();
     }
